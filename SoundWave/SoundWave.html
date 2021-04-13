@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>超声波折射计算[Mavericks]</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="layui/css/layui.css">
+</head>
+
+<body>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>超声波折射计算</legend>
+    </fieldset>
+    <div class="layui-bg-gray" style="padding: 0px;">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <blockquote class="layui-elem-quote">
+                    <i class="layui-icon layui-icon-app"> 计算公示 Sin(A1):W1 = Sin(A2):W2 = Sin(A3):W3</i>
+                </blockquote>
+                <div class="layui-card-body">
+                    <form class="layui-form" action="" lay-filter="example">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">已知条件</label>
+                                <div class="layui-input-block">
+                                    <select name="cbK" lay-filter="cbKs">
+                                        <option value="1" selected="">入射角A1</option>
+                                        <option value="2">横波折射角A2</option>
+                                        <option value="3">纵波折射角A3</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">入射角A1</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="nbA1" name="nbA1" lay-verify="required|number"
+                                        autocomplete="off" class="layui-input" value="0">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">波速W1</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="nbW1" lay-verify="required|number" autocomplete="off"
+                                        class="layui-input" value="2730">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">横波折射角A2</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="nbA2" name="nbA2" lay-verify="required|number"
+                                        autocomplete="off" class="layui-input" value="0" disabled="true">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">波速W2</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="nbW2" lay-verify="required|number" autocomplete="off"
+                                        class="layui-input" value="3230">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">纵波折射角A3</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="nbA3" name="nbA3" lay-verify="required|number"
+                                        autocomplete="off" class="layui-input" value="0" disabled="true">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">波速W3</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="nbW3" lay-verify="required|number" autocomplete="off"
+                                        class="layui-input" value="5900">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">第一临界角CA1</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="nbCA1" lay-verify="required|number" autocomplete="off"
+                                        class="layui-input" value="27.5622" disabled="true">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">第二临界角CA2</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="nbCA2" lay-verify="required|number" autocomplete="off"
+                                        class="layui-input" value="57.6935" disabled="true">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">显示辅助线</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="cbCA1" title="第一临界角CA1" checked="1" lay-filter="cbAs">
+                                <input type="checkbox" name="cbCA2" title="第二临界角CA2" checked="1" lay-filter="cbAs">
+                                <input type="checkbox" name="cbX" title="交界面X" checked="1" lay-filter="cbAs">
+                                <input type="checkbox" name="cbY" title="法线Y" checked="1" lay-filter="cbAs">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="button" class="layui-btn layui-btn-normal"
+                                    id="LAY-component-form-setval">重置表单</button>
+                                <button type="button" class="layui-btn layui-btn-normal"
+                                    id="LAY-component-form-getval">模拟演示</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <blockquote class="layui-elem-quote">
+                    <i class="layui-icon layui-icon-chart-screen"> 模拟演示</i>
+                </blockquote>
+                <div id="slideAng" class="demo-slider layui-form-item" style="margin: 20px 50px 20px 50px;"></div>
+                <div class="layui-card-body"><canvas id="myCanvas" width="500" height="420"
+                        style="border:0px solid #FFFFFF;">
+                        Your browser does not support the canvas element.
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript">
+
+    //窗口加载、重置大小
+    window.onresize = window.onload = function () {
+        var w, h
+        if (!!(window.attachEvent && !window.opera)) {
+            h = document.documentElement.clientHeight;
+            w = document.documentElement.clientWidth;
+        } else {
+            h = window.innerHeight;
+            w = window.innerWidth;
+        }
+        DrawA();
+    }
+
+    //layui表单
+    var form = layui.form;
+
+    //画布对象
+    var c = document.getElementById("myCanvas");
+
+    //画布
+    function DrawA() {
+        var data = form.val('example');
+        var A1 = 0;
+        try {
+            A1 = data.nbA1;
+        }
+        catch
+        {
+            A1 = 0;
+        }
+
+        var A2 = 0;
+        try {
+            A2 = data.nbA2;
+        }
+        catch
+        {
+            A2 = 0;
+        }
+
+        var A3 = 0;
+        try {
+            A3 = data.nbA3;
+        }
+        catch
+        {
+            A3 = 0;
+        }
+
+        var cxt = c.getContext("2d");
+
+        var w = c.width;
+        var h = c.height;
+
+        //重置画布，大小赋值时画布会重置
+        c.height = c.height;
+        var x = w / 2;
+        var y = h / 2;
+        var r = x < y ? x : y;
+        r = 0.8 * r;
+
+        var rrad = 180 / Math.PI;
+        var rad = Math.PI / 180;
+
+        var CA1 = 27.5622;
+        var CA2 = 57.6935;
+
+        try {
+            CA1 = data.nbCA1;
+        }
+        catch
+        {
+            CA1 = 27.5622;
+        }
+
+        try {
+            CA2 = data.nbCA2;
+        }
+        catch
+        {
+            CA2 = 57.6935;
+        }
+
+        var x1 = x;
+        var y1 = y;
+
+        cxt.strokeStyle = "#009688";
+
+        //法线
+        if (data.cbY == 'on') {
+            cxt.moveTo(x, y - r);
+            cxt.lineTo(x, y + r);
+            cxt.moveTo(x, y - r);
+            cxt.lineTo(x - 10, y - r + 10);
+            cxt.moveTo(x, y - r);
+            cxt.lineTo(x + 10, y - r + 10);
+        }
+
+        //交界面
+        if (data.cbX == 'on') {
+            cxt.moveTo(x - r, y);
+            cxt.lineTo(x + r, y);
+            cxt.moveTo(x + r, y);
+            cxt.lineTo(x + r - 10, y - 10);
+            cxt.moveTo(x + r, y);
+            cxt.lineTo(x + r - 10, y + 10);
+        }
+
+        //第一临界角辅助线
+        if (data.cbCA1 == 'on') {
+            cxt.moveTo(x, y);
+            x1 = x - Math.sin(CA1 * rad) * r;
+            y1 = y - Math.cos(CA1 * rad) * r;
+            cxt.lineTo(x1, y1);
+            cxt.fillText('CA1=' + CA1, x1, y1);
+            console.log('第一临界角辅助线:X=' + x1 + ',Y=' + y1);
+        }
+
+        //第二临界角辅助线
+        if (data.cbCA2 == 'on') {
+            cxt.moveTo(x, y);
+            x1 = x - Math.sin(CA2 * rad) * r;
+            y1 = y - Math.cos(CA2 * rad) * r;
+            cxt.lineTo(x1, y1);
+            cxt.fillText('CA2=' + CA2, x1, y1);
+            console.log('第二临界角辅助线:X=' + x1 + ',Y=' + y1);
+        }
+
+        //入射角
+        cxt.moveTo(x, y);
+        x1 = x - Math.sin(A1 * rad) * r;
+        y1 = y - Math.cos(A1 * rad) * r;
+        cxt.lineTo(x1, y1);
+        cxt.fillText('A1=' + A1, x1, y1 - 10);
+        console.log('入射角:X=' + x1 + ',Y=' + y1);
+
+        //横波折射角
+        cxt.moveTo(x, y);
+        x1 = x + Math.sin(A2 * rad) * r;
+        y1 = y + Math.cos(A2 * rad) * r;
+        cxt.lineTo(x1, y1);
+        cxt.fillText('A2=' + A2, x1, y1);
+        console.log('横波折射角:X=' + x1 + ',Y=' + y1);
+
+        //纵波折射角
+        cxt.moveTo(x, y);
+        x1 = x + Math.sin(A3 * rad) * r;
+        y1 = y + Math.cos(A3 * rad) * r;
+        cxt.lineTo(x1, y1);
+        cxt.fillText('A3=' + A3, x1, y1 - 10);
+        console.log('纵波折射角:X=' + x1 + ',Y=' + y1);
+
+        cxt.stroke();
+    };
+
+    //滑动块
+    layui.use('slider', function () {
+        var $ = layui.$
+            , slider = layui.slider;
+        var data = form.val('example');
+        //垂直滑块
+        slider.render({
+            elem: '#slideAng'
+            , min: 0
+            , max: 90
+            , value: 0
+            , input: true //输入框
+            , setTips: function (value) { //自定义提示文本
+                return '角度' + value;
+            }
+            , change: function (value) {
+                console.log(value) //动态获取滑块数值
+                Calc(value);
+                DrawA();
+            }
+        });
+
+        //监听输入框事件
+        $('#nbA1').on('change', function () {
+            Calc(this.value);
+            DrawA();
+            //$('#slideAng').attr("value", this.value);
+        });
+
+        $('#nbA2').on('change', function () {
+            Calc(this.value);
+            DrawA();
+        });
+
+        $('#nbA3').on('change', function () {
+            Calc(this.value);
+            DrawA();
+        });
+    });
+
+    //计算
+    function Calc(value) {
+        var data = form.val('example');
+        var rad = Math.PI / 180.0;
+        var rrad = 1.0 / rad;
+        if (data.cbK == 1) {
+            form.val('example', {
+                "nbA1": value,
+                "nbA2": (Math.asin(Math.sin(value * rad) * data.nbW2 / data.nbW1) * rrad).toFixed(4),
+                "nbA3": (Math.asin(Math.sin(value * rad) * data.nbW3 / data.nbW1) * rrad).toFixed(4),
+                "nbCA1": (Math.asin(Math.sin(90.0 * rad) * data.nbW1 / data.nbW3) * rrad).toFixed(4),
+                "nbCA2": (Math.asin(Math.sin(90.0 * rad) * data.nbW1 / data.nbW2) * rrad).toFixed(4),
+            });
+        }
+        if (data.cbK == 2) {
+            form.val('example', {
+                "nbA1": (Math.asin(Math.sin(value * rad) * data.nbW1 / data.nbW2) * rrad).toFixed(4),
+                "nbA2": value,
+                "nbA3": (Math.asin(Math.sin(value * rad) * data.nbW3 / data.nbW2) * rrad).toFixed(4),
+                "nbCA1": (Math.asin(Math.sin(90.0 * rad) * data.nbW1 / data.nbW3) * rrad).toFixed(4),
+                "nbCA2": (Math.asin(Math.sin(90.0 * rad) * data.nbW1 / data.nbW2) * rrad).toFixed(4),
+            });
+        }
+        if (data.cbK == 3) {
+            form.val('example', {
+                "nbA1": (Math.asin(Math.sin(value * rad) * data.nbW1 / data.nbW3) * rrad).toFixed(4),
+                "nbA2": (Math.asin(Math.sin(value * rad) * data.nbW2 / data.nbW3) * rrad).toFixed(4),
+                "nbA3": value,
+                "nbCA1": (Math.asin(Math.sin(90.0 * rad) * data.nbW1 / data.nbW3) * rrad).toFixed(4),
+                "nbCA2": (Math.asin(Math.sin(90.0 * rad) * data.nbW1 / data.nbW2) * rrad).toFixed(4),
+            });
+        }
+    }
+
+    //表单操作
+    layui.use(['form'], function () {
+        var form = layui.form
+            , layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+            nbA1: function (value) {
+                if (value < 0 || value > 90) {
+                    return '请输入[0-90]之间的数字';
+                }
+            },
+            nbA2: function (value) {
+                if (value < 0 || value > 90) {
+                    return '请输入[0-90]之间的数字';
+                }
+            },
+            nbA3: function (value) {
+                if (value < 0 || value > 90) {
+                    return '请输入[0-90]之间的数字';
+                }
+            },
+        });
+
+        //重置表单
+        layui.$('#LAY-component-form-setval').on('click', function () {
+            form.val('example', {
+                cbK: 1
+                , "nbA1": "0"
+                , "nbA2": "0"
+                , "nbA3": "0"
+                , "nbW1": "2720"
+                , "nbW2": "3230"
+                , "nbW3": "5900"
+                , "nbCA1": "27.5622"
+                , "nbCA2": "57.6935"
+                , "cbCA1": true
+                , "cbCA2": true
+                , "cbX": true
+                , "cbY": true
+            });
+            DrawA();
+        });
+
+        //计算绘制
+        layui.$('#LAY-component-form-getval').on('click', function () {
+            var data = form.val('example');
+            if (data.cbK == 1) {
+                value = data.nbA1;
+                Calc(value);
+            }
+            if (data.cbK == 2) {
+                value = data.nbA2;
+                Calc(value);
+            }
+            if (data.cbK == 3) {
+                value = data.nbA3;
+                Calc(value);
+            }
+            DrawA();
+        });
+
+        //辅助线
+        form.on('checkbox(cbAs)', function () {
+            DrawA();
+        });
+
+        //已知条件
+        form.on('select(cbKs)', function (val) {
+            if (val.value == 1) {
+                layui.$('#nbA1').attr("disabled", false);
+                layui.$('#nbA2').attr("disabled", true);
+                layui.$('#nbA3').attr("disabled", true);
+            }
+            if (val.value == 2) {
+                layui.$('#nbA1').attr("disabled", true);
+                layui.$('#nbA2').attr("disabled", false);
+                layui.$('#nbA3').attr("disabled", true);
+            }
+            if (val.value == 3) {
+                layui.$('#nbA1').attr("disabled", true);
+                layui.$('#nbA2').attr("disabled", true);
+                layui.$('#nbA3').attr("disabled", false);
+            }
+        });
+    });
+</script>
+
+</html>
